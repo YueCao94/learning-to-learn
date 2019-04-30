@@ -27,22 +27,30 @@ from six.moves import xrange
 import problems
 import pdb
 
-def run_epoch(sess, cost_op, update, step, reset, num_unrolls):
+def run_epoch(sess, cost_op, update, step, reset, num_unrolls, test):
   """Runs one optimization epoch."""
+#  print("len.cost_op",len(cost_op))
+#  print('test',sess.run(test))
 #  pdb.set_trace()
-#  print(len(cost_op))
-  print(cost_op)
+  print(sess.run(test))
   start = timer()
   for sub_reset in (reset):
-    sess.run(reset)
-  pdb.set_trace()
+    sess.run(sub_reset)
+#  pdb.set_trace()
+  ops=[*zip(update, step)]
+  print(len(ops))
   for _ in xrange(num_unrolls):
-    ops=[*zip(update, step)]
-#    print(ops[1])
-#    print(sess.run([cost_op[0]] + list(ops[0]))[0] )
-#对每个lstm 迭代后的loss求和
-    cost = sum([sess.run([cost_op[i]] + list(ops[i]))[0] for i in range(len(cost_op))])
-  return timer() - start, cost
+    cost=[]
+    print('test',sess.run(test))
+    print(sess.run(cost_op))
+    for i in range(len(cost_op)):
+      sub_cost=sess.run([cost_op[i]] + list(ops[i]))[0] 
+      cost.append(sub_cost)
+      print(sub_cost)
+#   print(ops[1])
+#   print(sess.run([cost_op[0]] + list(ops[0]))[0] )
+#    cost = [sess.run([cost_op[i]] + list(ops[i]))[0] for i in range(len(cost_op))]
+  return timer() - start, sum(cost)
 
 
 def print_stats(header, total_error, total_time, n):
