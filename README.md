@@ -1,4 +1,4 @@
-# [Learning to Learn](https://arxiv.org/abs/1606.04474) in TensorFlow
+# [Learning to Learn] with poseterior estimation
 
 
 ## Dependencies
